@@ -1,0 +1,829 @@
+@charset "UTF-8";
+/* Reset by Eric Meyer
+----------------------------------------------------*/
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+:focus {
+  outline: 0;
+}
+ins {
+  text-decoration: none;
+}
+del {
+  text-decoration: line-through;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section {
+  display: block;
+}
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+}
+small {
+  font-size: 85%;
+}
+/* self clear */
+.clearself:before,
+.clearself:after {
+  content: " ";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+.clearself:after {
+  clear: both;
+}
+.clearself {
+  zoom: 1;
+}
+/* IE < 8 */
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+/**
+ * 1. Set default font family to sans-serif.
+ * 2. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+html {
+  font-family: sans-serif;
+  /* 1 */
+  -ms-text-size-adjust: 100%;
+  /* 2 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */
+}
+/**
+ * Remove default margin.
+ */
+body {
+  margin: 0;
+}
+/* HTML5 display definitions
+   ========================================================================== */
+/**
+ * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for `details` or `summary` in IE 10/11
+ * and Firefox.
+ * Correct `block` display not defined for `main` in IE 11.
+ */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block;
+}
+/**
+ * 1. Correct `inline-block` display not defined in IE 8/9.
+ * 2. Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
+ */
+audio,
+canvas,
+progress,
+video {
+  display: inline-block;
+  /* 1 */
+  vertical-align: baseline;
+  /* 2 */
+}
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+/**
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ */
+[hidden],
+template {
+  display: none;
+}
+/* Links
+   ========================================================================== */
+/**
+ * Remove the gray background color from active links in IE 10.
+ */
+a {
+  background-color: transparent;
+}
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+a:active,
+a:hover {
+  outline: 0;
+}
+/* Text-level semantics
+   ========================================================================== */
+/**
+ * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
+ */
+abbr[title] {
+  border-bottom: 1px dotted;
+}
+/**
+ * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
+ */
+b,
+strong {
+  font-weight: bold;
+}
+/**
+ * Address styling not present in Safari and Chrome.
+ */
+dfn {
+  font-style: italic;
+}
+/**
+ * Address variable `h1` font-size and margin within `section` and `article`
+ * contexts in Firefox 4+, Safari, and Chrome.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+/**
+ * Address styling not present in IE 8/9.
+ */
+mark {
+  background: #ff0;
+  color: #000;
+}
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+small {
+  font-size: 80%;
+}
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+/* Embedded content
+   ========================================================================== */
+/**
+ * Remove border when inside `a` element in IE 8/9/10.
+ */
+img {
+  border: 0;
+}
+/**
+ * Correct overflow not hidden in IE 9/10/11.
+ */
+svg:not(:root) {
+  overflow: hidden;
+}
+/* Grouping content
+   ========================================================================== */
+/**
+ * Address margin not present in IE 8/9 and Safari.
+ */
+figure {
+  margin: 1em 40px;
+}
+/**
+ * Address differences between Firefox and other browsers.
+ */
+hr {
+  box-sizing: content-box;
+  height: 0;
+}
+/**
+ * Contain overflow in all browsers.
+ */
+pre {
+  overflow: auto;
+}
+/**
+ * Address odd `em`-unit font size rendering in all browsers.
+ */
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+/* Forms
+   ========================================================================== */
+/**
+ * Known limitation: by default, Chrome and Safari on OS X allow very limited
+ * styling of `select`, unless a `border` property is set.
+ */
+/**
+ * 1. Correct color not being inherited.
+ *    Known issue: affects color of disabled elements.
+ * 2. Correct font properties not being inherited.
+ * 3. Address margins set differently in Firefox 4+, Safari, and Chrome.
+ */
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  /* 1 */
+  font: inherit;
+  /* 2 */
+  margin: 0;
+  /* 3 */
+}
+/**
+ * Address `overflow` set to `hidden` in IE 8/9/10/11.
+ */
+button {
+  overflow: visible;
+}
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Firefox, IE 8/9/10/11, and Opera.
+ * Correct `select` style inheritance in Firefox.
+ */
+button,
+select {
+  text-transform: none;
+}
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ */
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  /* 2 */
+  cursor: pointer;
+  /* 3 */
+}
+/**
+ * Re-set default cursor for disabled elements.
+ */
+button[disabled],
+html input[disabled] {
+  cursor: default;
+}
+/**
+ * Remove inner padding and border in Firefox 4+.
+ */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+/**
+ * Address Firefox 4+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+input {
+  line-height: normal;
+}
+/**
+ * It's recommended that you don't attempt to style these elements.
+ * Firefox's implementation doesn't respect box-sizing, padding, or width.
+ *
+ * 1. Address box sizing set to `content-box` in IE 8/9/10.
+ * 2. Remove excess padding in IE 8/9/10.
+ */
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+/**
+ * Fix the cursor style for Chrome's increment/decrement buttons. For certain
+ * `font-size` values of the `input`, it causes the cursor style of the
+ * decrement button to change from `default` to `text`.
+ */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  height: auto;
+}
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari and Chrome
+ *    (include `-moz` to future-proof).
+ */
+input[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  /* 2 */
+  box-sizing: content-box;
+}
+/**
+ * Remove inner padding and search cancel button in Safari and Chrome on OS X.
+ * Safari (but not Chrome) clips the cancel button when the search input has
+ * padding (and `textfield` appearance).
+ */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+/**
+ * Define consistent border, margin, and padding.
+ */
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em;
+}
+/**
+ * 1. Correct `color` not being inherited in IE 8/9/10/11.
+ * 2. Remove padding so people aren't caught out if they zero out fieldsets.
+ */
+legend {
+  border: 0;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+}
+/**
+ * Remove default vertical scrollbar in IE 8/9/10/11.
+ */
+textarea {
+  overflow: auto;
+}
+/**
+ * Don't inherit the `font-weight` (applied by a rule above).
+ * NOTE: the default cannot safely be changed in Chrome and Safari on OS X.
+ */
+optgroup {
+  font-weight: bold;
+}
+/* Tables
+   ========================================================================== */
+/**
+ * Remove most spacing between table cells.
+ */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+td,
+th {
+  padding: 0;
+}
+/* Let's drop all media query widths in this file.
+ * Please don't crazy with the viewport sizes.
+ *
+ * All media query widths are expressed in ems.  Make sure
+ * to update the pixel equivalent when adding a new
+ * width. You should let content & design determine your breakpoints.
+ * Don't try to force your constraints with the current widths already
+ * defined.
+ * @mq-mobile-portrait: 320px !default;  -- iPhone4 portrait
+ * @mq-mobile-landscape: 480px !default;  -- iPhone4 landscape
+ * @mq-tablet-portrait: 768px !default;   -- iPad portrait
+ * @mq-tablet-landscape: 1024px !default ;  -- iPad landscape
+ * @mq-desktop: 1200px !default;
+ */
+/* These are the basics viewport sizes for flexible viewport.*/
+/* Here are the outlier viewport sizes */
+/* Here are some tiny monitors. */
+/*
+ *
+ * Utilities are meant to be purely structural and for positioning elements.
+ * These mixins can also be used on any element and alongside other component classes.
+ * The purpose of Utilities is to provide access to certain CSS properties and
+ * patterns that are used frequently together.
+ *
+ */
+.u-inline-block {
+  display: inline-block;
+}
+.u-table-cell {
+  display: table-cell;
+}
+.u-pullLeft {
+  float: left;
+}
+.u-pullRight {
+  float: right;
+}
+.u-truncate {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Nice overlay is placed over any div container
+ * that applies this mixin. This allows easy
+ * click transactions for logging.
+ */
+/*
+ * Helpful presentation style mixins.
+ */
+/* Simple CSS transitions */
+/* Linear gradients. May not be necessary since we use mixins. */
+.bottom-margin {
+  margin-bottom: 2em;
+}
+/*
+ * GRIDS
+ * ---------------------
+ */
+.grid {
+  background: white;
+  margin: 0 0 0 0;
+}
+.grid:after {
+  /* Or @extend clearfix */
+  content: "";
+  display: table;
+  clear: both;
+}
+[class*='col-'] {
+  float: left;
+  padding-right: 0;
+}
+.col-2-3 {
+  width: 66.66%;
+}
+.col-1-3 {
+  width: 33.33%;
+}
+.col-1-2 {
+  width: 50%;
+}
+.col-1-4 {
+  width: 25%;
+}
+.col-1-8 {
+  width: 12.5%;
+}
+/* Opt-in outside padding */
+.grid-pad {
+  padding: 0 0 0 0;
+}
+/*
+ * END OF GRIDS
+ * ----------------------
+ */
+/* base button style for the entire app. */
+.btn {
+  font-size: 1.125em;
+  line-height: 1.5;
+  padding: .3em .8em;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: #58a -webkit-linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+  background: #58a linear-gradient(rgba(255, 255, 255, 0.2), transparent);
+  background-color: #58a;
+  /* default color */
+  border-radius: .3em;
+  color: white;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 1px rgba(0, 0, 0, 0.05);
+  display: inline-block;
+  -webkit-transition: all .5s linear;
+          transition: all .5s linear;
+  text-decoration: none;
+  text-align: center;
+}
+.btn--red {
+  background-color: #eb3846;
+  background-image: -webkit-linear-gradient(270deg, #F2635D 0%, #E71C13 100%);
+  background-image: linear-gradient(-180deg, #F2635D 0%, #E71C13 100%);
+  /* hard coded red colors */
+}
+.btn--whiteGradient {
+  background-color: #FCFCFD;
+  background-image: -webkit-linear-gradient(270deg, #FCFCFD 0%, #F3F4F5 100%);
+  background-image: linear-gradient(-180deg, #FCFCFD 0%, #F3F4F5 100%);
+  color: #4a90e2;
+}
+.btn--snowWhite {
+  background-color: #ffffff;
+  background-image: -webkit-linear-gradient(#fff, #f7f9fb);
+  background-image: linear-gradient(#fff, #f7f9fb);
+  color: #4a90e2;
+  border: 1px solid #d4dce4;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.btn--blueGradient {
+  background: #4a90e2;
+  background-image: -webkit-linear-gradient(270deg, #69B2FD 0%, #007AFF 100%);
+  background-image: linear-gradient(-180deg, #69B2FD 0%, #007AFF 100%);
+}
+.btn--opaqueBlue {
+  background: rgba(105, 178, 253, 0.3);
+}
+.btn--opaqueBlue.btn--blueGradient {
+  background: #4a90e2;
+  background-image: -webkit-linear-gradient(270deg, #69B2FD 0%, #007AFF 100%);
+  background-image: linear-gradient(-180deg, #69B2FD 0%, #007AFF 100%);
+}
+.btn--whiteFlat {
+  background-color: #ffffff;
+  box-shadow: initial;
+  border-color: #CCCCCC;
+  color: #999;
+}
+/* Let's use a sensible z-index scale.
+ * Please do not use 9999.
+ *
+ * You have a limited range of 1 - 9
+ *
+ * NOTE:  Remember, z-index acts differently when dealing with
+ *        elements that are positioned absolute.
+ *
+ *        I recommend reading "What No One Told You About Z-Index"
+ *        http://philipwalton.com/articles/what-no-one-told-you-about-z-index/
+ */
+/* GLG Logo mixin */
+/* Whenever you need to display the company logo.
+ * Grap it from here.
+ */
+.GLGLogo {
+  font-family: "GLG_PD_131126", "Helvetica Neue", Helvetica, Arial, sans-serif, sans-serif;
+  font-style: normal;
+  width: 15.625em;
+  /* The logo should be strict */
+}
+.GLGLogo .glg-name {
+  font-size: 1.1em;
+  font-weight: 400;
+  font-style: normal;
+  position: relative;
+  right: -0.4em;
+  bottom: 0.06em;
+}
+.GLGLogo .slant {
+  color: #eb3846;
+  font-size: 1.438em;
+  font-weight: 200;
+  margin: 0 0.13em;
+}
+.GLGLogo .go-text {
+  font-size: 1.375em;
+  font-weight: 100;
+  position: relative;
+  bottom: 1px;
+  left: -0.4em;
+  text-transform: uppercase;
+  font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.GLGLogo .go-text.go-thin {
+  font-weight: 200;
+  font-style: normal;
+}
+.g-logo {
+  font-family: "GLG_PD_131126", "Helvetica Neue", Helvetica, Arial, sans-serif, sans-serif;
+  font-style: normal;
+  font-size: 0.75em;
+}
+@-webkit-keyframes spinner-loader {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinner-loader {
+  0% {
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+/* :not(:required) hides this rule from IE9 and below */
+.spinner-loader:not(:required) {
+  -webkit-animation: spinner-loader 1500ms infinite linear;
+  animation: spinner-loader 1500ms infinite linear;
+  border-radius: 0.5em;
+  box-shadow: rgba(0, 0, 51, 0.3) 1.5em 0 0 0, rgba(0, 0, 51, 0.3) 1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) 0 1.5em 0 0, rgba(0, 0, 51, 0.3) -1.1em 1.1em 0 0, rgba(0, 0, 51, 0.3) -1.5em 0 0 0, rgba(0, 0, 51, 0.3) -1.1em -1.1em 0 0, rgba(0, 0, 51, 0.3) 0 -1.5em 0 0, rgba(0, 0, 51, 0.3) 1.1em -1.1em 0 0;
+  display: inline-block;
+  font-size: 8px;
+  width: 0.8em;
+  height: 0.8em;
+  margin: 1.5em;
+  overflow: hidden;
+  text-indent: 100%;
+}
+/*
+ * CSS styles for the heading only.  Please don't add
+ * anything else that is not related.
+ */
+header {
+  border-bottom: 1px solid rgba(173, 175, 178, 0.6);
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+@media (min-width: 37.5em) {
+  header {
+    display: table;
+  }
+}
+header a {
+  text-decoration: none;
+}
+header .GLGLogo {
+  width: 100%;
+}
+header .GLGLogo h1 {
+  display: inline-block;
+}
+header .GLGLogo h1 .go-text {
+  font-family: "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 100;
+}
+@media (min-width: 37.5em) {
+  header .GLGLogo h1 {
+    display: block;
+  }
+}
+@media (min-width: 37.5em) {
+  header .GLGLogo {
+    padding: 1em 0;
+    display: table-cell;
+    vertical-align: middle;
+    width: 30%;
+  }
+}
+.header-controls {
+  display: none;
+  padding-right: 1em;
+  position: relative;
+  text-align: right;
+}
+@media (min-width: 37.5em) {
+  .header-controls {
+    display: table-cell;
+    vertical-align: middle;
+  }
+}
+.header-controls .header-logoutBtn {
+  cursor: pointer;
+  font-size: 0.875em;
+  text-decoration: none;
+  position: relative;
+  display: block;
+  width: 110px;
+  text-align: right;
+  float: right;
+  margin-top: 15px;
+  padding: 0 0 0.2em 0;
+  font-weight: 400;
+  font-style: normal;
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-transition: all 250ms ease-in-out;
+          transition: all 250ms ease-in-out;
+}
+.header-controls .header-logoutBtn .login-phoneIcon {
+  font-size: 1.375em;
+  position: relative;
+  top: 6px;
+}
+.header-controls .header-logoutBtn:active {
+  position: relative;
+  top: 1px;
+}
+.header-controls .header-logoutBtn:hover {
+  color: #ffffff;
+  background-image: -webkit-linear-gradient(270deg, #69b2fd 0%, #007aff 100%);
+  background-image: linear-gradient(-180deg, #69b2fd 0%, #007aff 100%);
+  border-color: #4a90e2;
+}
+.header-controls .header-logoutBtn:hover .login-phoneIcon {
+  color: #ffffff;
+}
