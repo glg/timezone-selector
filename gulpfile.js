@@ -33,7 +33,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('copy-timezone-file', function(){
-  gulp.src(paths.momentData)
+  return gulp.src(paths.momentData)
     .pipe(gulp.dest('./data/'));
 });
 
@@ -50,7 +50,7 @@ gulp.task('start', function () {
 });
 
 gulp.task('generate-timezones', function() {
-  gulp.src('./data/*')
+  return gulp.src('./data/*')
     .pipe(genTimezones())
     .pipe(gulp.dest('./'));
 });
@@ -59,6 +59,6 @@ gulp.task('generate-timezones', function() {
 gulp.task('default', function(){
     runSequence( 'build', 'start', 'watch');
 });
-gulp.task('build', function() {
-  runSequence( 'clean', 'copy-timezone-file', 'browserify', 'generate-timezones');
+gulp.task('build', function(cb) {
+  runSequence( 'clean', 'copy-timezone-file', 'browserify', 'generate-timezones', cb);
 });
