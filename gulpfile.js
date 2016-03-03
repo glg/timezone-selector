@@ -28,7 +28,7 @@ gulp.task('browserify', function() {
         .pipe(gulp.dest('./app/public/js/'));
 });
 gulp.task('clean', function() {
-    return gulp.src(['./dist/*', './output.json', './data/latest.json'], {read: false})
+    return gulp.src(['./output.json', './data/latest.json'], {read: false})
       .pipe(clean());
 });
 
