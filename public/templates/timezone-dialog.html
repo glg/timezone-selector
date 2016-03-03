@@ -1,5 +1,10 @@
-<div>
-    <h2>Input a City or Timezone</h1>
-    <input type="text" ng-model="test"/>
-</div>
-<div ng-bind="test"></div>
+<h1>Selected Timezone: </h1>
+<h4>{{formatTimezone(selectedTimezone)}}</h4>
+<hr>
+
+    <form ng-submit="$event.preventDefault()">
+        <input type="text" ng-change="searchTextChange(searchText)" ng-model="searchText" placeholder="Type the name of a timezone/city/country/state" style="width: 400px">
+        <div style = "border: 1px seagreen solid; width: 400px" ng-if="timezones.length > 0">
+            <div class="selectable" ng-repeat="timezone in timezones" value="{{timezone.d}}" ng-click="selectTimezone(timezone)">{{formatTimezone(timezone)}}</div>
+        </div>
+    </form>

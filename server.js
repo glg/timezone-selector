@@ -13,12 +13,14 @@ var start         = moment().format('hh:m:ss');
 var browserify    = require('browserify-middleware');
 var app           = express();
 
+var SELECTABLES = require('./output.json');
 
 var Bloodhound = require('bloodhound-js');
 var engine = new Bloodhound({
-  local: ['dog', 'pig', 'moose', 'dig', 'pug', 'digging', 'mom', 'drive'],
+  limit: 10,
+  local: SELECTABLES.selectables,
   queryTokenizer: Bloodhound.tokenizers.whitespace,
-  datumTokenizer: Bloodhound.tokenizers.whitespace
+  datumTokenizer: Bloodhound.tokenizers.obj.whitespace("T")
 });
 
 var promise = engine.initialize();
@@ -73,8 +75,12 @@ router.get('/diagnostic', function(req, res) {
 
 router.get('/api', function(req, res){
   var query = req.query.q;
+  var response = {};
     engine.search(query, function(d) {
-        res.status(200).send(d);
+        if (d.length > 0){
+            response = d.splice(0,10);
+        }
+        res.status(200).send(response);
     }, function(d) {
         res.status(500).send("Failed: " + d);
     });

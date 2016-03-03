@@ -2,32 +2,47 @@
 var moment = require('moment-timezone');
 
 
-module.exports = /*@ngInject*/ function($scope) {
+module.exports = /*@ngInject*/ function($scope, $http) {
     $scope.test = "...";
-};
+    $scope.moment = moment;
+    $scope.selectedTimezone = undefined;
 
-},{"moment-timezone":18}],2:[function(require,module,exports){
-var schedulable = /*@ngInject*/ function($document) {
-    return {
-        'restrict' : 'A',
-        link: function (scope, element, attr) {
-            element.on('mouseenter', schedMouseEnter);
-            function schedMouseEnter(event) {
-                console.log("Entered Schedulable", element[0].id);
-                element.on('mousedown', schedMouseDown);
-            }
-            function schedMouseDown(event){
-                event.preventDefault();
-                event.stopPropagation();
-                console.log("Mouse Down");
-            }
+
+    var successCallback = function(d){
+        $scope.timezones = d.data;
+    };
+
+    var errorCallback = function(e){
+        console.log("Error: ", e);
+    };
+
+    $scope.querySearch = function (query) {
+        $http.get('http://localhost:8888/api/', {params: {q: $scope.searchText}}).then(successCallback, errorCallback);
+    };
+
+    $scope.searchTextChange = function(text) {
+        $scope.querySearch(text);
+    };
+
+    $scope.selectTimezone = function(item) {
+        $scope.selectedTimezone = item;
+        $scope.searchText = item.d;
+        $scope.timezones = [];
+    };
+
+    $scope.formatTimezone = function(tz){
+        if (!tz || tz === undefined || !tz.hasOwnProperty('z')){
+            return "None";
+        }
+        else{
+            var timestamp = new moment.tz(tz.z);
+            var abbr = moment.tz.zone(tz.z).abbr(timestamp);
+            return tz.d + ' (' + abbr + ') ' + timestamp.format('h:mm a') + ' ' + timestamp.format('ZZ');
         }
     };
 };
 
-exports.schedulable = schedulable;
-
-},{}],3:[function(require,module,exports){
+},{"moment-timezone":17}],2:[function(require,module,exports){
 'use strict';
 
 require('angular');
@@ -40,7 +55,6 @@ require('angular-touch');
 
 
 
-var timezoneDirectives = require('./directives/directive');
 var timezoneSelector = angular.module('TimezoneSelector', ['ngRoute', 'ngAnimate'])
   .config([
     '$locationProvider',
@@ -60,9 +74,8 @@ var timezoneSelector = angular.module('TimezoneSelector', ['ngRoute', 'ngAnimate
   ])
 
   .controller('MainController', require('./controllers/controller'))
-  .directive('schedulable', timezoneDirectives.schedulable);
 
-},{"./controllers/controller":1,"./directives/directive":2,"angular":16,"angular-animate":5,"angular-cache":6,"angular-cookies":8,"angular-route":10,"angular-sanitize":12,"angular-touch":14}],4:[function(require,module,exports){
+},{"./controllers/controller":1,"angular":15,"angular-animate":4,"angular-cache":5,"angular-cookies":7,"angular-route":9,"angular-sanitize":11,"angular-touch":13}],3:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -3992,11 +4005,11 @@ angular.module('ngAnimate', [])
 
 })(window, window.angular);
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 require('./angular-animate');
 module.exports = 'ngAnimate';
 
-},{"./angular-animate":4}],6:[function(require,module,exports){
+},{"./angular-animate":3}],5:[function(require,module,exports){
 /*!
  * angular-cache
  * @version 4.5.0 - Homepage <https://github.com/jmdobry/angular-cache>
@@ -5324,7 +5337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 
-},{"angular":16}],7:[function(require,module,exports){
+},{"angular":15}],6:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -5647,11 +5660,11 @@ angular.module('ngCookies').provider('$$cookieWriter', function $$CookieWriterPr
 
 })(window, window.angular);
 
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 require('./angular-cookies');
 module.exports = 'ngCookies';
 
-},{"./angular-cookies":7}],9:[function(require,module,exports){
+},{"./angular-cookies":6}],8:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -6644,11 +6657,11 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 })(window, window.angular);
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 require('./angular-route');
 module.exports = 'ngRoute';
 
-},{"./angular-route":9}],11:[function(require,module,exports){
+},{"./angular-route":8}],10:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -7333,11 +7346,11 @@ angular.module('ngSanitize').filter('linky', ['$sanitize', function($sanitize) {
 
 })(window, window.angular);
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 require('./angular-sanitize');
 module.exports = 'ngSanitize';
 
-},{"./angular-sanitize":11}],13:[function(require,module,exports){
+},{"./angular-sanitize":10}],12:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -7967,11 +7980,11 @@ makeSwipeDirective('ngSwipeRight', 1, 'swiperight');
 
 })(window, window.angular);
 
-},{}],14:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 require('./angular-touch');
 module.exports = 'ngTouch';
 
-},{"./angular-touch":13}],15:[function(require,module,exports){
+},{"./angular-touch":12}],14:[function(require,module,exports){
 /**
  * @license AngularJS v1.4.7
  * (c) 2010-2015 Google, Inc. http://angularjs.org
@@ -36876,11 +36889,11 @@ $provide.value("$locale", {
 })(window, document);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":15}],17:[function(require,module,exports){
+},{"./angular":14}],16:[function(require,module,exports){
 module.exports={
 	"version": "2015g",
 	"zones": [
@@ -37471,11 +37484,11 @@ module.exports={
 		"Pacific/Pohnpei|Pacific/Ponape"
 	]
 }
-},{}],18:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var moment = module.exports = require("./moment-timezone");
 moment.tz.load(require('./data/packed/latest.json'));
 
-},{"./data/packed/latest.json":17,"./moment-timezone":19}],19:[function(require,module,exports){
+},{"./data/packed/latest.json":16,"./moment-timezone":18}],18:[function(require,module,exports){
 //! moment-timezone.js
 //! version : 0.5.0
 //! author : Tim Wood
@@ -38060,7 +38073,7 @@ moment.tz.load(require('./data/packed/latest.json'));
 	return moment;
 }));
 
-},{"moment":20}],20:[function(require,module,exports){
+},{"moment":19}],19:[function(require,module,exports){
 //! moment.js
 //! version : 2.11.2
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
@@ -41667,4 +41680,4 @@ moment.tz.load(require('./data/packed/latest.json'));
     return _moment;
 
 }));
-},{}]},{},[3]);
+},{}]},{},[2]);

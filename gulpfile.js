@@ -13,7 +13,8 @@ var genTimezones = require('./generate-timezone');
 
 var paths = {
   public:   ['app/public/'],
-  scripts:  ['app/js/**/*.js', 'app/js/*.js']
+  scripts:  ['app/js/**/*.js', 'app/js/*.js'],
+  momentData: ['node_modules/moment-timezone/data/packed/latest.json']
 };
 
 // tasks
@@ -27,8 +28,13 @@ gulp.task('browserify', function() {
         .pipe(gulp.dest('./app/public/js/'));
 });
 gulp.task('clean', function() {
-    return gulp.src('./dist/*', {read: false})
+    return gulp.src(['./dist/*', './output.json', './data/latest.json'], {read: false})
       .pipe(clean());
+});
+
+gulp.task('copy-timezone-file', function(){
+  gulp.src(paths.momentData)
+    .pipe(gulp.dest('./data/'));
 });
 
 gulp.task('watch', function() {
@@ -46,18 +52,13 @@ gulp.task('start', function () {
 gulp.task('generate-timezones', function() {
   gulp.src('./data/*')
     .pipe(genTimezones())
-    .pipe(gulp.dest('./public/'));
+    .pipe(gulp.dest('./'));
 });
 
 // default task
 gulp.task('default', function(){
-    runSequence(
-        ['build', 'start', 'watch']
-    );
+    runSequence( 'build', 'start', 'watch');
 });
 gulp.task('build', function() {
-  runSequence(
-    'clean',
-    ['browserify', 'generate-timezones']
-  );
+  runSequence( 'clean', 'copy-timezone-file', 'browserify', 'generate-timezones');
 });

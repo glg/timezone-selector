@@ -10,7 +10,6 @@ require('angular-touch');
 
 
 
-var timezoneDirectives = require('./directives/directive');
 var timezoneSelector = angular.module('TimezoneSelector', ['ngRoute', 'ngAnimate'])
   .config([
     '$locationProvider',
@@ -30,4 +29,3 @@ var timezoneSelector = angular.module('TimezoneSelector', ['ngRoute', 'ngAnimate
   ])
 
   .controller('MainController', require('./controllers/controller'))
-  .directive('schedulable', timezoneDirectives.schedulable);

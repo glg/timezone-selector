@@ -827,3 +827,8 @@ header .GLGLogo h1 .go-text {
 .header-controls .header-logoutBtn:hover .login-phoneIcon {
   color: #ffffff;
 }
+
+
+.selectable:hover{
+    background: cadetblue;
+}
