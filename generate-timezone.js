@@ -21,7 +21,11 @@ module.exports = function(options) {
             var line = cityArray[i].trim().split("\t");
             if (/\S/.test(line)){
                 var mainName = [line[2]];
-                var translatedNames = _.union(mainName, line[3].split(','));
+                //
+                //  Uncomment the translatedNames to use the translations
+                //
+                // var translatedNames = _.union(mainName, line[3].split(','));
+                var translatedNames = mainName;
                 var country = line[8];
                 var state = country == 'US' && line[10] || undefined;
                 var population = parseInt(line[14]);
