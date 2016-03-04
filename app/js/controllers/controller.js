@@ -1,4 +1,5 @@
 var moment = require('moment-timezone');
+var tzserviceApiUrl = "http://staging.glgresearch.com/timezone-selector/api/";
 
 
 module.exports = /*@ngInject*/ function($scope, $http) {
@@ -16,7 +17,7 @@ module.exports = /*@ngInject*/ function($scope, $http) {
     };
 
     $scope.querySearch = function (query) {
-        $http.get('http://localhost:8888/api/', {params: {q: $scope.searchText}}).then(successCallback, errorCallback);
+        $http.get(tzserviceApiUrl, {params: {q: $scope.searchText}}).then(successCallback, errorCallback);
     };
 
     $scope.searchTextChange = function(text) {
