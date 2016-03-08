@@ -10,31 +10,57 @@ var parseString = require('xml2js').parseString;
 var moment = require('moment-timezone');
 var _ = require('lodash');
 
+// Unicode aware Regex for all special characters
+var re = new RegExp(/[\-=_!"#%&'*{},.\/:;?\(\)\[\]@\\$\^*+<>~`\u00a1\u00a7\u00b6\u00b7\u00bf\u037e\u0387\u055a-\u055f\u0589\u05c0\u05c3\u05c6\u05f3\u05f4\u0609\u060a\u060c\u060d\u061b\u061e\u061f\u066a-\u066d\u06d4\u0700-\u070d\u07f7-\u07f9\u0830-\u083e\u085e\u0964\u0965\u0970\u0af0\u0df4\u0e4f\u0e5a\u0e5b\u0f04-\u0f12\u0f14\u0f85\u0fd0-\u0fd4\u0fd9\u0fda\u104a-\u104f\u10fb\u1360-\u1368\u166d\u166e\u16eb-\u16ed\u1735\u1736\u17d4-\u17d6\u17d8-\u17da\u1800-\u1805\u1807-\u180a\u1944\u1945\u1a1e\u1a1f\u1aa0-\u1aa6\u1aa8-\u1aad\u1b5a-\u1b60\u1bfc-\u1bff\u1c3b-\u1c3f\u1c7e\u1c7f\u1cc0-\u1cc7\u1cd3\u2016\u2017\u2020-\u2027\u2030-\u2038\u203b-\u203e\u2041-\u2043\u2047-\u2051\u2053\u2055-\u205e\u2cf9-\u2cfc\u2cfe\u2cff\u2d70\u2e00\u2e01\u2e06-\u2e08\u2e0b\u2e0e-\u2e16\u2e18\u2e19\u2e1b\u2e1e\u2e1f\u2e2a-\u2e2e\u2e30-\u2e39\u3001-\u3003\u303d\u30fb\ua4fe\ua4ff\ua60d-\ua60f\ua673\ua67e\ua6f2-\ua6f7\ua874-\ua877\ua8ce\ua8cf\ua8f8-\ua8fa\ua92e\ua92f\ua95f\ua9c1-\ua9cd\ua9de\ua9df\uaa5c-\uaa5f\uaade\uaadf\uaaf0\uaaf1\uabeb\ufe10-\ufe16\ufe19\ufe30\ufe45\ufe46\ufe49-\ufe4c\ufe50-\ufe52\ufe54-\ufe57\ufe5f-\ufe61\ufe68\ufe6a\ufe6b\uff01-\uff03\uff05-\uff07\uff0a\uff0c\uff0e\uff0f\uff1a\uff1b\uff1f\uff20\uff3c\uff61\uff64\uff65]+/g);
+//
+
 module.exports = function(options) {
     options = options || {};
     var fileContents = {};
 
     var convertCities = function(){
         var cities = {};
+        cities.english = {};
+        cities.poly = {};
         var cityArray = fileContents['cities15000.txt'].split(/\r?\n/);
         for (var i=0; i < cityArray.length; i++){
             var line = cityArray[i].trim().split("\t");
             if (/\S/.test(line)){
-                var mainName = [line[2]];
+                var cityName = line[2];
                 //
                 //  Uncomment the translatedNames to use the translations
                 //
-                // var translatedNames = _.union(mainName, line[3].split(','));
-                var translatedNames = mainName;
+                var translatedNames = line[3].split(',');
                 var country = line[8];
                 var state = country == 'US' && line[10] || undefined;
                 var population = parseInt(line[14]);
                 var timezone = line[17];
                 var isCapital = line[7] == 'PPLC' || undefined;
-
+                var cityKey;
+                if (state){
+                    cityKey = country + '/' + cityName + '/' + state;
+                }
+                else{
+                    cityKey = country + '/' + cityName;
+                }
+                cityKey = cityKey.replace(' ', '_');
+                // There was already a city with that name, let the one
+                // with the higher population win.
+                if (!cities.english.hasOwnProperty(cityKey) || population > cities.english[cityKey].population){
+                    cities.english[cityKey] = {
+                        country: country,
+                        state: state,
+                        name: cityName,
+                        timezone: timezone,
+                        population: population,
+                        isCapital: isCapital
+                    };
+                }
+                // Generate the translated city names object
+                var cloneCity = _.clone(cities.english[cityKey]);
+                cities.poly[cityKey] = cloneCity;
                 for (var j =0;j<translatedNames.length; j++){
-                    var cityName = translatedNames[j];
-                    var cityKey;
+                    cityName = translatedNames[j];
                     if (state){
                         cityKey = country + '/' + cityName + '/' + state;
                     }
@@ -42,18 +68,14 @@ module.exports = function(options) {
                         cityKey = country + '/' + cityName;
                     }
                     cityKey = cityKey.replace(' ', '_');
-                    // There was already a city with that name, let the one
-                    // with the higher population win.
-                    if (!cities.hasOwnProperty(cityKey) || population > cities[cityKey].population){
-                        cities[cityKey] = {
-                            country: country,
-                            state: state,
-                            name: cityName,
-                            timezone: timezone,
-                            population: population,
-                            isCapital: isCapital
-                        };
-                    }
+                    cities.poly[cityKey] = {
+                        country: country,
+                        state: state,
+                        name: cityName,
+                        timezone: timezone,
+                        population: population,
+                        isCapital: isCapital
+                    };
                 }
             }
         }
@@ -105,19 +127,29 @@ module.exports = function(options) {
         var timezoneMapping = {};
         var timezonesFound = {};
 
-        var saveSelectable = function(key, name, fullName, tz, country, commonTz, sortInfo){
-            var re = new RegExp(/[\-=_!"#%&'*{},.\/:;?\(\)\[\]@\\$\^*+<>~`\u00a1\u00a7\u00b6\u00b7\u00bf\u037e\u0387\u055a-\u055f\u0589\u05c0\u05c3\u05c6\u05f3\u05f4\u0609\u060a\u060c\u060d\u061b\u061e\u061f\u066a-\u066d\u06d4\u0700-\u070d\u07f7-\u07f9\u0830-\u083e\u085e\u0964\u0965\u0970\u0af0\u0df4\u0e4f\u0e5a\u0e5b\u0f04-\u0f12\u0f14\u0f85\u0fd0-\u0fd4\u0fd9\u0fda\u104a-\u104f\u10fb\u1360-\u1368\u166d\u166e\u16eb-\u16ed\u1735\u1736\u17d4-\u17d6\u17d8-\u17da\u1800-\u1805\u1807-\u180a\u1944\u1945\u1a1e\u1a1f\u1aa0-\u1aa6\u1aa8-\u1aad\u1b5a-\u1b60\u1bfc-\u1bff\u1c3b-\u1c3f\u1c7e\u1c7f\u1cc0-\u1cc7\u1cd3\u2016\u2017\u2020-\u2027\u2030-\u2038\u203b-\u203e\u2041-\u2043\u2047-\u2051\u2053\u2055-\u205e\u2cf9-\u2cfc\u2cfe\u2cff\u2d70\u2e00\u2e01\u2e06-\u2e08\u2e0b\u2e0e-\u2e16\u2e18\u2e19\u2e1b\u2e1e\u2e1f\u2e2a-\u2e2e\u2e30-\u2e39\u3001-\u3003\u303d\u30fb\ua4fe\ua4ff\ua60d-\ua60f\ua673\ua67e\ua6f2-\ua6f7\ua874-\ua877\ua8ce\ua8cf\ua8f8-\ua8fa\ua92e\ua92f\ua95f\ua9c1-\ua9cd\ua9de\ua9df\uaa5c-\uaa5f\uaade\uaadf\uaaf0\uaaf1\uabeb\ufe10-\ufe16\ufe19\ufe30\ufe45\ufe46\ufe49-\ufe4c\ufe50-\ufe52\ufe54-\ufe57\ufe5f-\ufe61\ufe68\ufe6a\ufe6b\uff01-\uff03\uff05-\uff07\uff0a\uff0c\uff0e\uff0f\uff1a\uff1b\uff1f\uff20\uff3c\uff61\uff64\uff65]+/g);
+        var saveSelectable = function(key, name, fullName, tz, country, commonTz, sortInfo, poly){
             var tokens = fullName.toLowerCase().replace(re, '').split(' ');
             sortInfo = sortInfo !== undefined ? sortInfo : {};
             tokens = _.chain(tokens).union(getAbbrs(tz)).sortBy().value();
-            var rv = {
-                'k': key,
-                'd': fullName,
-                'z': tz,
-                'T': tokens.join(' '),
-                'sortinfo': sortInfo
-            };
-
+            var rv = {};
+            if (poly !== undefined){
+                rv = {
+                    'k': key,
+                    'd': fullName,
+                    'z': tz,
+                    'P': tokens.join(' '),
+                    'sortinfo': sortInfo
+                };
+            }
+            else{
+                rv = {
+                    'k': key,
+                    'd': fullName,
+                    'z': tz,
+                    'T': tokens.join(' '),
+                    'sortinfo': sortInfo
+                };
+            }
             if (name != fullName){
                 rv.n = name;
             }
@@ -164,8 +196,15 @@ module.exports = function(options) {
             if (item.hasOwnProperty('C')){
                 itemScore += 5;
             }
-            if (isCanonical(item.d, item.T.split(' '))){
-                itemScore += 5;
+            if (item.hasOwnProperty('T')){
+                if (isCanonical(item.d, item.T.split(' '))){
+                    itemScore += 5;
+                }
+            }
+            else if (item.hasOwnProperty('P')){
+                if (isCanonical(item.d, item.P.split(' '))){
+                    itemScore += 5;
+                }
             }
             if (item.hasOwnProperty('sortinfo') && Object.keys(item.sortinfo).length !== 0){
                 if(item.sortinfo.city.isCapital){
@@ -192,22 +231,38 @@ module.exports = function(options) {
         }
 
 
-
-        for(var city in cities ){
-            var keyName = (cities[city].country.toLowerCase() + ":" + cities[city].name + ':' + (cities[city].state || '')).replace(/\:+$/, '').toLowerCase() ;
+        for(var city in cities.english ){
+            var keyName = (cities.english[city].country.toLowerCase() + ":" + cities.english[city].name + ':' + (cities.english[city].state || '')).replace(/\:+$/, '').toLowerCase() ;
             keyName = keyName.replace(' ', '-')
             .replace('_', '-')
             .replace('\'', '')
             .replace(',', '')
             .replace('(', '')
             .replace(')', '');
-            var displayParts = [countries[cities[city].country].name];
-            if (cities[city].hasOwnProperty('state') && cities[city].state !== undefined){
-                displayParts.push(cities[city].state);
+            var displayParts = [countries[cities.english[city].country].name];
+            if (cities.english[city].hasOwnProperty('state') && cities.english[city].state !== undefined){
+                displayParts.push(cities.english[city].state);
             }
-            displayParts.push(cities[city].name);
-            saveSelectable(keyName, cities[city].name, displayParts.join(', '), cities[city].timezone, cities[city].country, false, {city: cities[city]});
-            timezonesFound[cities[city].timezone] = 1;
+            displayParts.push(cities.english[city].name);
+            saveSelectable(keyName, cities.english[city].name, displayParts.join(', '), cities.english[city].timezone, cities.english[city].country, false, {city: cities.english[city]});
+            timezonesFound[cities.english[city].timezone] = 1;
+        }
+
+        for(city in cities.poly ){
+            var polyKeyName = (cities.poly[city].country.toLowerCase() + ":" + cities.poly[city].name + ':' + (cities.poly[city].state || '')).replace(/\:+$/, '').toLowerCase() ;
+            polyKeyName = polyKeyName.replace(' ', '-')
+            .replace('_', '-')
+            .replace('\'', '')
+            .replace(',', '')
+            .replace('(', '')
+            .replace(')', '');
+            var polyDisplayParts = [countries[cities.poly[city].country].name];
+            if (cities.poly[city].hasOwnProperty('state') && cities.poly[city].state !== undefined){
+                polyDisplayParts.push(cities.poly[city].state);
+            }
+            polyDisplayParts.push(cities.poly[city].name);
+            saveSelectable(polyKeyName, cities.poly[city].name, polyDisplayParts.join(', '), cities.poly[city].timezone, cities.poly[city].country, false, {city: cities.poly[city]}, true);
+            timezonesFound[cities.poly[city].timezone] = 1;
         }
 
         for (var name in timezoneMapping){

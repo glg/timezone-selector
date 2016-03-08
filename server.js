@@ -16,14 +16,23 @@ var app           = express();
 var SELECTABLES = require('./output.json');
 
 var Bloodhound = require('bloodhound-js');
-var engine = new Bloodhound({
-  limit: 10,
-  local: SELECTABLES.selectables,
-  queryTokenizer: Bloodhound.tokenizers.whitespace,
-  datumTokenizer: Bloodhound.tokenizers.obj.whitespace("T")
+var englishSearch = new Bloodhound({
+    limit: 10,
+    local: SELECTABLES.selectables,
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("T")
 });
 
-var promise = engine.initialize();
+
+var polySearch = new Bloodhound({
+    limit: 10,
+    local: SELECTABLES.selectables,
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("P")
+});
+
+englishSearch.initialize();
+polySearch.initialize();
 
 app.set('views', __dirname + '/views');
 app.set('public', path.join(__dirname, 'public'));
@@ -31,25 +40,25 @@ app.set('port', process.argv[2] || process.env.PORT || 8888);
 
 // The client app bundles.
 var commonAppLibs = [
-  'angular',
-  'angular-route',
-  'angular-animate',
-  'angular-cookies',
-  'angular-cache',
-  'angular-sanitize',
-  'angular-touch',
-  'moment-timezone',
-  'jstimezonedetect',
-  'lodash'
+    'angular',
+    'angular-route',
+    'angular-animate',
+    'angular-cookies',
+    'angular-cache',
+    'angular-sanitize',
+    'angular-touch',
+    'moment-timezone',
+    'jstimezonedetect',
+    'lodash'
 ];
 
 app.get('/scripts/common.js', browserify(commonAppLibs, {
-  basedir: './app/js'
+    basedir: './app/js'
 }));
 
 app.get('/scripts/bundle.js', browserify(path.join(__dirname, 'app/js/main.js'), {
-  transform: ['envify', 'browserify-ngannotate'],
-  external: commonAppLibs
+    transform: ['envify', 'browserify-ngannotate'],
+    external: commonAppLibs
 }));
 
 
@@ -58,32 +67,44 @@ app.use(express.static(app.get('public')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-  extended: true
+    extended: true
 }));
 
 app.use(cookieParser('cookies!'));
 app.use(cookieSession({
-  secret: 'i_<3_t1m3z0n3z',
-  cookie: { path: '/', httpOnly: true, maxAge: 60*60*1000}
+    secret: 'i_<3_t1m3z0n3z',
+    cookie: { path: '/', httpOnly: true, maxAge: 60*60*1000}
 }));
 
 var router = express.Router();
 
 router.get('/diagnostic', function(req, res) {
-  res.status(200).send('ok');
+    res.status(200).send('ok');
 });
 
 router.get('/api', function(req, res){
-  var query = req.query.q;
-  var response = {};
-    engine.search(query, function(d) {
-        if (d.length > 0){
-            response = d.splice(0,10);
-        }
-        res.status(200).send(response);
-    }, function(d) {
-        res.status(500).send("Failed: " + d);
-    });
+    var query = req.query.q;
+    var response = {};
+    if (req.query.hasOwnProperty('poly') && req.query.poly){
+        polySearch.search(query, function(d) {
+            if (d.length > 0){
+                response = d.splice(0,10);
+            }
+            res.status(200).send(response);
+        }, function(d) {
+            res.status(500).send("Failed: " + d);
+        });
+    }
+    else{
+        englishSearch.search(query, function(d) {
+            if (d.length > 0){
+                response = d.splice(0,10);
+            }
+            res.status(200).send(response);
+        }, function(d) {
+            res.status(500).send("Failed: " + d);
+        });
+    }
 });
 
 router.get('/', function(req, res) {
@@ -92,11 +113,11 @@ router.get('/', function(req, res) {
 
 // index page
 router.get('/app', function(req, res) {
-  var route = req.path || '';
-  if (route.indexOf(path.sep, route.length - path.sep.length) !== -1) {
-    return res.redirect('../');
-  }
-  res.render('index.html');
+    var route = req.path || '';
+    if (route.indexOf(path.sep, route.length - path.sep.length) !== -1) {
+        return res.redirect('../');
+    }
+    res.render('index.html');
 });
 
 
