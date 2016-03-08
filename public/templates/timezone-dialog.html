@@ -3,6 +3,8 @@
 <hr>
 
     <form ng-submit="$event.preventDefault()">
+
+        <label>English Only?<input type="checkbox" ng-model="english" checked></input></label><br/>
         <input type="text" ng-change="searchTextChange(searchText)" ng-model="searchText" placeholder="Type the name of a timezone/city/country/state" style="width: 400px">
         <div style = "border: 1px seagreen solid; width: 400px" ng-if="timezones.length > 0">
             <div class="selectable" ng-repeat="timezone in timezones" value="{{timezone.d}}" ng-click="selectTimezone(timezone)">{{formatTimezone(timezone)}}</div>

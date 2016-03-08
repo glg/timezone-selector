@@ -85,7 +85,8 @@ router.get('/diagnostic', function(req, res) {
 router.get('/api', function(req, res){
     var query = req.query.q;
     var response = {};
-    if (req.query.hasOwnProperty('poly') && req.query.poly){
+    console.log("ParseInt: ", parseInt(req.query.poly));
+    if (req.query.hasOwnProperty('poly') && parseInt(req.query.poly) === 1){
         polySearch.search(query, function(d) {
             if (d.length > 0){
                 response = d.splice(0,10);

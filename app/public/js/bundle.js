@@ -7,6 +7,7 @@ module.exports = /*@ngInject*/ function($scope, $http) {
     $scope.test = "...";
     $scope.moment = moment;
     $scope.selectedTimezone = undefined;
+    $scope.english = true;
 
 
     var successCallback = function(d){
@@ -18,7 +19,7 @@ module.exports = /*@ngInject*/ function($scope, $http) {
     };
 
     $scope.querySearch = function (query) {
-        $http.get(tzserviceApiUrl, {params: {q: $scope.searchText}}).then(successCallback, errorCallback);
+        $http.get(tzserviceApiUrl, {params: {q: $scope.searchText, poly: $scope.english ? 0 : 1}}).then(successCallback, errorCallback);
     };
 
     $scope.searchTextChange = function(text) {
