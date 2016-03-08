@@ -1,5 +1,6 @@
 var moment = require('moment-timezone');
-var tzserviceApiUrl = "http://staging.glgresearch.com/timezone-selector/api/";
+var tzserviceApiUrl = "http://localhost:8888/api/";
+var jstz = require('jstimezonedetect');
 
 
 module.exports = /*@ngInject*/ function($scope, $http) {
@@ -7,6 +8,19 @@ module.exports = /*@ngInject*/ function($scope, $http) {
     $scope.moment = moment;
     $scope.selectedTimezone = undefined;
     $scope.english = true;
+
+    var timezone = jstz.determine().name();
+
+    var setInitialTimezone = function(d){
+        console.log("Setting Timezone to: ", d.data[0]);
+        $scope.selectedTimezone = d.data[0];
+    };
+
+    var errorInitialTimezone = function(d){
+        console.log("Error: ", d);
+    };
+
+    $http.get(tzserviceApiUrl, {params: {q: timezone, zoneName: 1}}).then(setInitialTimezone, errorInitialTimezone);
 
 
     var successCallback = function(d){

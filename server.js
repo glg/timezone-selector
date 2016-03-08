@@ -17,22 +17,26 @@ var SELECTABLES = require('./output.json');
 
 var Bloodhound = require('bloodhound-js');
 var englishSearch = new Bloodhound({
-    limit: 10,
     local: SELECTABLES.selectables,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("T")
 });
 
-
 var polySearch = new Bloodhound({
-    limit: 10,
     local: SELECTABLES.selectables,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("P")
 });
 
+var zoneSearch = new Bloodhound({
+    local: SELECTABLES.selectables,
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace("z")
+});
+
 englishSearch.initialize();
 polySearch.initialize();
+zoneSearch.initialize();
 
 app.set('views', __dirname + '/views');
 app.set('public', path.join(__dirname, 'public'));
@@ -85,8 +89,15 @@ router.get('/diagnostic', function(req, res) {
 router.get('/api', function(req, res){
     var query = req.query.q;
     var response = {};
-    console.log("ParseInt: ", parseInt(req.query.poly));
-    if (req.query.hasOwnProperty('poly') && parseInt(req.query.poly) === 1){
+    if (req.query.hasOwnProperty('zoneName') && parseInt(req.query.zoneName) === 1){
+        zoneSearch.search(query, function(d){
+            response = d.splice(0,1);
+            res.status(200).send(response);
+        }, function(d){
+            res.status(500).send("Failed: " + d);
+        });
+    }
+    else if (req.query.hasOwnProperty('poly') && parseInt(req.query.poly) === 1){
         polySearch.search(query, function(d) {
             if (d.length > 0){
                 response = d.splice(0,10);

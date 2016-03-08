@@ -39,7 +39,7 @@ gulp.task('copy-timezone-file', function(){
 
 gulp.task('watch', function() {
   // Watch less files
-  gulp.watch(paths.scripts, ['build']);
+  gulp.watch(paths.scripts, ['browserify']);
 });
 
 gulp.task('start', function () {
