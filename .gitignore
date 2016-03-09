@@ -19,3 +19,4 @@ node_modules
 
 output.json
 data/latest.json
+app/public/js/bundle.js
