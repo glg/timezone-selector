@@ -22,10 +22,18 @@ var sorter = function (a, b) {
   if (a.s< b.s) {
     return -1;
   }
-  if (a.n.toLowerCase() > b.n.toLowerCase()){
+  if (a.hasOwnProperty('n') && b.hasOwnProperty('n')){
+      if (a.n.toLowerCase() > b.n.toLowerCase()){
+          return 1;
+      }
+      if (a.n.toLowerCase() < b.n.toLowerCase()){
+          return -1;
+      }
+  }
+  if (a.d.toLowerCase() > b.d.toLowerCase()){
       return 1;
   }
-  if (a.n.toLowerCase() < b.n.toLowerCase()){
+  if (a.d.toLowerCase() < b.d.toLowerCase()){
       return -1;
   }
   return 0;
