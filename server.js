@@ -15,21 +15,40 @@ var app           = express();
 
 var SELECTABLES = require('./output.json');
 
+var sorter = function (a, b) {
+  if (a.s> b.s) {
+    return 1;
+  }
+  if (a.s< b.s) {
+    return -1;
+  }
+  if (a.n.toLowerCase() > b.n.toLowerCase()){
+      return 1;
+  }
+  if (a.n.toLowerCase() < b.n.toLowerCase()){
+      return -1;
+  }
+  return 0;
+};
+
 var Bloodhound = require('bloodhound-js');
 var englishSearch = new Bloodhound({
     local: SELECTABLES.selectables,
+    sorter: sorter,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("T")
 });
 
 var polySearch = new Bloodhound({
     local: SELECTABLES.selectables,
+    sorter: sorter,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("P")
 });
 
 var zoneSearch = new Bloodhound({
     local: SELECTABLES.selectables,
+    sorter: sorter,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     datumTokenizer: Bloodhound.tokenizers.obj.whitespace("z")
 });
@@ -87,6 +106,13 @@ router.get('/diagnostic', function(req, res) {
 });
 
 router.get('/api', function(req, res){
+    var origin = req.get('origin');
+    if (process.env.NODE_ENV !== "production" || origin.match(/\.glgresearch.com$/i)){
+        res.header("Access-Control-Allow-Origin", "*");
+    }
+    else{
+        console.log("Invalid Origin: ", origin);
+    }
     var query = req.query.q;
     var response = {};
     if (req.query.hasOwnProperty('zoneName') && parseInt(req.query.zoneName) === 1){

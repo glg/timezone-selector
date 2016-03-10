@@ -159,6 +159,7 @@ module.exports = function(options) {
             if (commonTz){
                 rv.C = 1;
             }
+            rv.s = score(rv);
 
             selectables.push(rv);
             };
@@ -285,9 +286,7 @@ module.exports = function(options) {
         }
 
 
-        var sortedSelectables = _.sortBy(selectables, [function(o){
-            return score(o);
-        },
+        var sortedSelectables = _.sortBy(selectables, ['s',
         function(p){
             return p.d.toLowerCase();
         }]);
@@ -295,9 +294,6 @@ module.exports = function(options) {
         _.forEach(selectables, function(n){
             delete n.sortinfo;
         });
-
-
-
 
         return {
             'tzmap': reverseTzMap,
