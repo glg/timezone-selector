@@ -115,7 +115,7 @@ router.get('/diagnostic', function(req, res) {
 
 router.get('/api', function(req, res){
     var origin = req.get('origin');
-    if (process.env.NODE_ENV !== "production" || origin.match(/\.glgresearch.com$/i)){
+    if (process.env.NODE_ENV !== "production" || origin === undefined || origin.match(/\.glgresearch.com$/i)){
         res.header("Access-Control-Allow-Origin", "*");
     }
     else{
