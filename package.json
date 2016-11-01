@@ -39,7 +39,7 @@
     "jshint": "2.9.1",
     "jstimezonedetect": "1.0.6",
     "lodash": "4.6.1",
-    "moment-timezone": "0.5.4",
+    "moment-timezone": "0.5.7",
     "run-sequence": "1.1.5",
     "through2": "2.0.1",
     "utf8": "2.1.1",
