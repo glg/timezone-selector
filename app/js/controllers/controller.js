@@ -1,5 +1,5 @@
 var moment = require('moment-timezone');
-var tzserviceApiUrl = process.env.NODE_ENV == "development" ? "http://localhost:8888/api/" : "http://staging.glgresearch.com/timezone-selector/api/";
+var tzserviceApiUrl = process.env.NODE_ENV == "development" ? "http://localhost:8888/api/" : "http://services.glgresearch.com/timezone-selector/api/";
 var jstz = require('jstimezonedetect');
 
 
