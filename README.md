@@ -2,11 +2,10 @@
 Timezone Selector
 
 To Use:
-```
- npm install -g bower
- npm install
- bower install
- gulp
+```bash
+npm install -g gulp
+npm install
+gulp
 ```
 Raw files for input to the convert script.  Here is where you can get them:
 
