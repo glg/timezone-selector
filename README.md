@@ -5,7 +5,7 @@ To Use:
 ```bash
 npm install -g gulp
 npm install
-gulp
+NODE_ENV=development gulp
 ```
 Raw files for input to the convert script.  Here is where you can get them:
 
